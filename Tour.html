@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tours - Mahavir Tours and Travel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #173645;
+            color: white;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        nav a {
+            margin: 0 15px;
+            color: white;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 20px;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        .search-section input, .search-section button {
+            padding: 10px;
+            margin: 10px;
+        }
+
+        /* Tour Section */
+        .tour-section {
+            padding: 40px 20px;
+        }
+
+        .tour-section h1 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .tour-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tour-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .tour-card:hover {
+            transform: scale(1.05);
+        }
+
+        .tour-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .tour-card h3 {
+            font-size: 24px;
+            margin: 15px;
+        }
+
+        .tour-card p {
+            font-size: 16px;
+            color: #173645;
+            margin: 0 15px 15px 15px;
+        }
+
+        .book-btn {
+            display: block;
+            text-align: center;
+            margin: 15px;
+            padding: 10px;
+            background-color: #008594;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .book-btn:hover {
+            background-color: #006f7a; /* Slightly darker on hover */
+        }
+
+        /* Modal for Package Details */
+        #packageDetailsModal, #bookingFormModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+            z-index: 1000;
+        }
+
+        /* Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999; /* Lower than modals */
+            display: none; /* Initially hidden */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">Mahavir Tours and Travel</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="Destination.html">Destinations</a>
+            <a href="Tour.html">Tours</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <h2>Find Your Perfect Tour</h2>
+        <form id="searchForm">
+            <input type="text" id="destination" placeholder="Enter Destination" />
+            <input type="date" id="searchTravelDate" />
+            <input type="number" id="budget" placeholder="Max Budget" />
+            <button type="submit">Search</button>
+        </form>
+        <div class="filters">
+            <label for="price">Max Price</label>
+            <input type="range" id="price" name="price" min="100" max="100000" step="100" oninput="this.nextElementSibling.value = this.value">
+            <output>100000</output>
+        </div>
+    </section>
+
+    <!-- Tour Section -->
+    <section class="tour-section">
+        <h1>Explore Our Tours</h1>
+        <div id="tourGrid" class="tour-grid">
+            <!-- Tour Packages will be dynamically inserted here -->
+        </div>
+    </section>
+
+    <!-- Package Details Modal -->
+    <div id="packageDetailsModal">
+        <div id="packageDetailsContent">
+            <!-- Details will be dynamically added here -->
+        </div>
+        <button onclick="closePackageDetails()">Close</button>
+    </div>
+
+    <!-- Booking Form Modal -->
+    <div id="bookingFormModal">
+        <form id="bookingForm">
+            <h2>Book Your Tour</h2>
+            <label for="name">Name:</label>
+            <input type="text" id="name" required />
+            
+            <label for="guests">Number of Guests:</label>
+            <input type="number" id="guests" required min="1" />
+
+            <label for="bookingTravelDate">Travel Date:</label>
+            <input type="date" id="bookingTravelDate" required />
+            
+            <button type="submit">Submit</button>
+        </form>
+        <button onclick="closeBookingForm()">Close</button>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay" onclick="closeAllModals()"></div>
+
+    <script>
+    // Conversion rate (1 USD = 82 INR)
+    const conversionRate = 82;
+
+    // Mock Data (Replace with API later)
+    const travelPackages = [
+        { id: 1, destination: "India", price: 500 * conversionRate, duration: "7 days", rating: 4.5, image: "./images2/india.webp", description: "Explore India." },
+        { id: 2, destination: "London", price: 900 * conversionRate, duration: "5 days", rating: 4.8, image: "./images2/london.jpg", description: "Explore London." },
+        { id: 3, destination: "Paris", price: 1200 * conversionRate, duration: "6 days", rating: 4.7, image: "./images2/paris.jpg", description: "Explore Paris." },
+        { id: 4, destination: "Brazil", price: 1100 * conversionRate, duration: "10 days", rating: 4.6, image: "./images2/brazil.png", description: "Explore Brazil." },
+        { id: 5, destination: "Japan", price: 1000 * conversionRate, duration: "8 days", rating: 4.9, image: "./images2/japan.jpg", description: "Explore Japan." },
+        { id: 6, destination: "Thailand", price: 800 * conversionRate, duration: "6 days", rating: 4.4, image: "./images2/thailand.webp", description: "Explore Thailand." },
+    ];
+
+    // Function to display travel packages
+    function displayPackages(packages) {
+        const tourGrid = document.getElementById("tourGrid");
+        tourGrid.innerHTML = ""; // Clear previous results
+
+        packages.forEach(pkg => {
+            const packageCard = `
+                <div class="tour-card">
+                    <img src="${pkg.image}" alt="${pkg.destination} Tour">
+                    <h3>${pkg.destination} Tour</h3>
+                    <p>${pkg.description}</p>
+                    <p>Price: ₹${pkg.price.toFixed(2)} | Rating: ${pkg.rating} | Duration: ${pkg.duration}</p>
+                    <a href="#" class="book-btn" onclick="showPackageDetails(${pkg.id})">View Details</a>
+                </div>`;
+            tourGrid.innerHTML += packageCard;
+        });
+    }
+
+    // Ensure DOM content is fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initial display of all packages
+        displayPackages(travelPackages);
+    });
+
+    // Search functionality
+    document.getElementById('searchForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        
+        const destination = document.getElementById('destination').value.toLowerCase();
+        const budget = parseInt(document.getElementById('budget').value);
+        const maxPrice = parseInt(document.getElementById('price').value);
+
+        const filteredPackages = travelPackages.filter(pkg => {
+            return pkg.destination.toLowerCase().includes(destination) &&
+                   pkg.price <= maxPrice &&
+                   (!budget || pkg.price <= budget);
+        });
+
+        displayPackages(filteredPackages);
+    });
+
+    // Function to show package details
+    function showPackageDetails(packageId) {
+        const selectedPackage = travelPackages.find(pkg => pkg.id === packageId);
+        const detailsContent = `
+            <h2>${selectedPackage.destination} Tour</h2>
+            <p>${selectedPackage.description}</p>
+            <p>Price: ₹${selectedPackage.price.toFixed(2)} | Rating: ${selectedPackage.rating} | Duration: ${selectedPackage.duration}</p>
+            <button class="book-btn" onclick="bookPackage()">Book Now</button>
+        `;
+        
+        document.getElementById('packageDetailsContent').innerHTML = detailsContent;
+        document.getElementById('packageDetailsModal').style.display = 'block';
+        document.getElementById('modalOverlay').style.display = 'block';
+    }
+
+    // Show booking form
+    function bookPackage() {
+        closePackageDetails(); // Close package details modal
+        document.getElementById('bookingFormModal').style.display = 'block';
+        document.getElementById('modalOverlay').style.display = 'block';
+    }
+
+    // Function to close package details modal
+    function closePackageDetails() {
+        document.getElementById('packageDetailsModal').style.display = 'none';
+        document.getElementById('modalOverlay').style.display = 'none';
+    }
+
+    // Close booking form
+    function closeBookingForm() {
+        document.getElementById('bookingFormModal').style.display = 'none';
+        document.getElementById('modalOverlay').style.display = 'none';
+    }
+
+    // Close all modals when clicking on the overlay
+    function closeAllModals() {
+        closePackageDetails();
+        closeBookingForm();
+    }
+
+    // Form validation
+    document.getElementById('bookingForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        alert('Booking submitted successfully!');
+        closeBookingForm();
+    });
+    </script>
+
+</body>
+</html>
