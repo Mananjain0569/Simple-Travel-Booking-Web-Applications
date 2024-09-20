@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website</title>
+    <link rel="stylesheet" href="slidshow.css">
+    <style>
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        
+        .logo {
+            font-size: 24px;
+        }
+        
+        /* Centered text */
+       
+    </style>
+</head>
+<body>
+    <!-- header -->
+    <header>
+        <div class="logo">Mahavir Tours and Travel</div>
+<div class = "centered-text">
+		<a class = "naveborder" href = "Destination.html">Destnation</a>
+		<a class = "naveborder" href = "Tour.html">Tour</a>
+		<a class = "naveborder" href = "contact.html">Contact</a>
+</div>
+
+    </header>
+
+    <!-- slider -->
+    <div class="slider">
+        <!-- list Items -->
+        <div class="list">
+            <div class="item active">
+                <img src="./images2/india.webp">
+            </div>
+            <div class="item">
+                <img src="./images2/london.jpg">
+            </div>
+            <div class="item">
+                <img src="./images2/newyork.avif">
+            </div>
+            <div class="item">
+                <img src="./images2/brazil.png">
+            </div>
+            <div class="item">
+                <img src="./images2/japan.jpg">
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const slides = document.querySelectorAll('.list .item');
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        setInterval(nextSlide, 3000); // Change slide every 3 seconds
+    </script>
+</body>
+</html>

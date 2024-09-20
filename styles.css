@@ -1,0 +1,149 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+/* Header Styles */
+header {
+    background-color: #173645;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.2rem;
+}
+
+/* Navigation Bar Styles */
+nav {
+    background-color: #173645;
+    color: white;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 15px 20px;
+    display: inline-block;
+}
+
+nav ul li a:hover {
+    background-color: #178581;
+    border-radius: 5px;
+}
+
+/* Booking Form Styles */
+section.booking {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+section.booking h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+section.booking form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+section.booking form label {
+    font-weight: bold;
+}
+
+section.booking form input, 
+section.booking form button {
+    padding: 10px;
+    border: 1px solid #173645;
+    border-radius: 5px;
+}
+
+section.booking form button {
+    background-color: #173645;
+    color: white;
+    cursor: pointer;
+}
+
+section.booking form button:hover {
+    background-color: #2f6d31;
+}
+
+/* Destination Section */
+section.destinations {
+    padding: 40px 0;
+    background-color: #f9f9f9;
+}
+
+section.destinations h2 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.destination-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.destination {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.destination img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 20px;
+}
+
+footer p {
+    margin: 0;
+}
